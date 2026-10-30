@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import {
   Check,
   ChevronDown,
@@ -18,15 +17,17 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useServiceExplorerData } from "@/hooks/use-service-explorer-data";
+import { calculateServicePrice, formatPrice } from "@/lib/pricing";
 import {
   DEFAULT_SERVICE_FILTERS,
   filterServices,
   type ServiceFilters,
 } from "@/lib/service-filters";
-import { calculateServicePrice, formatPrice } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 import type {
   Provider,
@@ -653,6 +654,8 @@ export function ServiceExplorerPage() {
     pageSize: 3200,
   });
   const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebouncedValue(searchInput, 300);
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [listView, setListView] = useState(false);
 
@@ -663,8 +666,11 @@ export function ServiceExplorerPage() {
 
   const filteredResult = useMemo(() => {
     if (!explorerData) return null;
-    return filterServices(explorerData, filters);
-  }, [explorerData, filters]);
+    return filterServices(explorerData, {
+      ...filters,
+      search: debouncedSearch,
+    });
+  }, [explorerData, filters, debouncedSearch]);
 
   const groupedProviders = useMemo(() => {
     if (!explorerData || !filteredResult) return [];
@@ -694,11 +700,6 @@ export function ServiceExplorerPage() {
 
   const updateSearch = (value: string) => {
     setSearchInput(value);
-    setFilters((current) => ({
-      ...current,
-      search: value,
-      page: 1,
-    }));
   };
 
   const clearFilters = () => {
