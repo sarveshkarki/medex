@@ -293,9 +293,6 @@ function calculateFacets(
 ): ServiceFacets {
   const allServices = data.services;
 
-  // const countWith = (value: string | number, facet: ExcludedFacet): number => {
-  //   const candidateFilters = { ...filters };
-
   //   switch (facet) {
   //     case "serviceTypes":
   //       candidateFilters.serviceTypes = [value as ServiceType];

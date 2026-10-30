@@ -45,7 +45,7 @@ function calculateBreakdown(
   const priceAfterDiscount = basePrice - discountAmount;
 
   if (priceAfterDiscount < 0) {
-    throw new Error("Discount cannot exceed the base price.");
+    return null;
   }
 
   const serviceCharge = toAmount(pricing.serviceCharge);
