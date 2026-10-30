@@ -1,4 +1,6 @@
+import { ServiceExplorerPage } from "@/components/service-explorer";
+
 const TaskOne = () => {
-  return <div>TaskOne</div>;
+  return <ServiceExplorerPage />;
 };
 export default TaskOne;

@@ -293,42 +293,42 @@ function calculateFacets(
 ): ServiceFacets {
   const allServices = data.services;
 
-  const countWith = (value: string | number, facet: ExcludedFacet): number => {
-    const candidateFilters = { ...filters };
+  // const countWith = (value: string | number, facet: ExcludedFacet): number => {
+  //   const candidateFilters = { ...filters };
 
-    switch (facet) {
-      case "serviceTypes":
-        candidateFilters.serviceTypes = [value as ServiceType];
-        break;
-      case "categories":
-        candidateFilters.categoryIds = [value as string];
-        // A category count should not be constrained by subcategory.
-        candidateFilters.subcategoryIds = [];
-        break;
-      case "subcategories":
-        candidateFilters.subcategoryIds = [value as string];
-        break;
-      case "providers":
-        candidateFilters.providerIds = [value as number];
-        break;
-      case "cities":
-        candidateFilters.cityNames = [value as string];
-        break;
-      case "countries":
-        candidateFilters.countryIds = [value as number];
-        break;
-    }
+  //   switch (facet) {
+  //     case "serviceTypes":
+  //       candidateFilters.serviceTypes = [value as ServiceType];
+  //       break;
+  //     case "categories":
+  //       candidateFilters.categoryIds = [value as string];
+  //       // A category count should not be constrained by subcategory.
+  //       candidateFilters.subcategoryIds = [];
+  //       break;
+  //     case "subcategories":
+  //       candidateFilters.subcategoryIds = [value as string];
+  //       break;
+  //     case "providers":
+  //       candidateFilters.providerIds = [value as number];
+  //       break;
+  //     case "cities":
+  //       candidateFilters.cityNames = [value as string];
+  //       break;
+  //     case "countries":
+  //       candidateFilters.countryIds = [value as number];
+  //       break;
+  //   }
 
-    return allServices.filter((service) =>
-      matchesFilters(
-        service,
-        providers.get(service.userId),
-        data,
-        candidateFilters,
-        facet,
-      ),
-    ).length;
-  };
+  //   return allServices.filter((service) =>
+  //     matchesFilters(
+  //       service,
+  //       providers.get(service.userId),
+  //       data,
+  //       candidateFilters,
+  //       facet,
+  //     ),
+  //   ).length;
+  // };
 
   const countForFacet = (
     value: string | number,
