@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import dataset from "../data/task1-service-explorer.json";
 import { calculateServicePrice, formatPrice } from "../lib/pricing";
-import type { Service, Currency } from "../types/service";
+import type { Service } from "../types/service";
 
 const service = dataset.services.find(
   (item) => item.id === "5f0c1a52-6b1e-4c1f-9a51-000000000001",
