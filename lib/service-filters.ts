@@ -84,7 +84,6 @@ function normalize(value: string | null | undefined): string {
 function getProviderMap(data: ServiceExplorerData) {
   return new Map(data.providers.map((provider) => [provider.id, provider]));
 }
-
 type CategoryRecord = ServiceExplorerData["categories"][number];
 
 const categoryMapCache = new WeakMap<
@@ -101,9 +100,19 @@ function getCategoryMap(
     return cached;
   }
 
-  const categories = new Map(
-    data.categories.map((category) => [category.id, category]),
-  );
+  const categories = new Map<string, CategoryRecord>();
+
+  function visit(items: CategoryRecord[]) {
+    for (const category of items) {
+      categories.set(category.id, category);
+
+      if (category.children?.length) {
+        visit(category.children);
+      }
+    }
+  }
+
+  visit(data.categories);
 
   categoryMapCache.set(data, categories);
 
@@ -175,6 +184,23 @@ function matchesFilters(
   exclude?: ExcludedFacet,
 ): boolean {
   if (!provider || provider.status !== "active" || !service.status) {
+    return false;
+  }
+
+  const categories = getCategoryMap(data);
+
+  const category = categories.get(service.categoryId);
+
+  const subcategory = service.subCategoryId
+    ? categories.get(service.subCategoryId)
+    : undefined;
+
+  // Inactive categories and subcategories should not be visible.
+  if (category && !category.status) {
+    return false;
+  }
+
+  if (subcategory && !subcategory.status) {
     return false;
   }
 
@@ -372,13 +398,15 @@ function calculateFacets(
     .filter((provider) => provider.status === "active")
     .map((provider) => provider.id);
 
-  const categoryOptions = data.categories.filter(
+  const allCategories = Array.from(categoryById.values());
+
+  const categoryOptions = allCategories.filter(
     (category) => category.status && !category.parentId,
   );
-  const subcategoryOptions = data.categories.filter(
+
+  const subcategoryOptions = allCategories.filter(
     (category) => category.status && category.parentId,
   );
-
   // Keep only facet values present in the supplied dataset.
   const cityValues = data.providers
     .filter((provider) => provider.status === "active")

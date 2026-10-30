@@ -20,6 +20,7 @@ import { ServicePagination } from "./service-explorer/components/service-paginat
 import { ServiceResults } from "./service-explorer/components/service-results";
 import { ServiceSearch } from "./service-explorer/components/service-search";
 import { ServiceToolbar } from "./service-explorer/components/service-toolbar";
+import Link from "next/link";
 
 const SERVICE_TYPE_LABELS: Record<ServiceType, string> = {
   package: "Health Packages",
@@ -109,30 +110,193 @@ export function ServiceExplorerPage() {
 
   if (isLoading) {
     return (
-      <main
-        className="mx-auto max-w-7xl space-y-6 p-6"
-        aria-busy="true"
-        aria-label="Loading services"
-      >
-        <div className="h-10 w-64 animate-pulse rounded bg-slate-100" />
-        <div className="h-24 animate-pulse rounded-xl bg-slate-100" />
-        <div className="h-52 animate-pulse rounded-xl bg-slate-100" />
-        <div className="h-52 animate-pulse rounded-xl bg-slate-100" />
-      </main>
+      <div className="min-h-screen bg-[#f8fafc] text-slate-900">
+        <div className="animate-pulse">
+          {/* Header */}
+          <header className="border-b border-slate-200 bg-white">
+            <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-8 px-5 lg:px-8">
+              <div className="h-9 w-28 rounded-lg bg-slate-200" />
+              <div className="hidden items-center gap-6 md:flex">
+                <div className="h-4 w-28 rounded bg-slate-100" />
+                <div className="h-4 w-36 rounded bg-slate-100" />
+              </div>
+              <div className="ml-auto flex items-center gap-3">
+                <div className="hidden h-9 w-28 rounded-lg bg-slate-100 sm:block" />
+                <div className="size-9 rounded-lg bg-slate-200" />
+              </div>
+            </div>
+          </header>
+
+          <main className="mx-auto max-w-[1440px] px-5 lg:px-8">
+            {/* Hero and search */}
+            <section className="border-b border-slate-200 py-9 lg:py-11">
+              <div className="max-w-3xl space-y-4">
+                <div className="h-3 w-44 rounded bg-teal-100" />
+                <div className="h-9 w-3/4 max-w-xl rounded-lg bg-slate-200 sm:h-11" />
+                <div className="h-4 w-full max-w-2xl rounded bg-slate-100" />
+                <div className="h-4 w-2/3 max-w-lg rounded bg-slate-100" />
+
+                <div className="mt-6 flex h-12 max-w-2xl items-center gap-3 rounded-xl border border-slate-200 bg-white px-4">
+                  <div className="size-5 rounded-full bg-slate-200" />
+                  <div className="h-4 w-48 rounded bg-slate-100" />
+                </div>
+              </div>
+            </section>
+
+            {/* Toolbar */}
+            <section className="flex flex-wrap items-center justify-between gap-4 py-6">
+              <div className="space-y-2">
+                <div className="h-5 w-40 rounded bg-slate-200" />
+                <div className="h-3 w-28 rounded bg-slate-100" />
+              </div>
+              <div className="flex gap-2">
+                <div className="h-10 w-28 rounded-lg bg-slate-200" />
+                <div className="h-10 w-24 rounded-lg bg-slate-200" />
+              </div>
+            </section>
+
+            {/* Main content */}
+            <div className="grid gap-8 lg:grid-cols-[270px_minmax(0,1fr)]">
+              {/* Filter sidebar */}
+              <aside className="hidden lg:block">
+                <div className="rounded-xl border border-slate-200 bg-white p-4">
+                  <div className="mb-5 h-5 w-32 rounded bg-slate-200" />
+
+                  {[1, 2, 3, 4, 5, 6].map((item) => (
+                    <div
+                      key={item}
+                      className="space-y-3 border-t border-slate-100 py-5"
+                    >
+                      <div className="h-4 w-32 rounded bg-slate-200" />
+                      <div className="h-9 rounded-lg bg-slate-100" />
+                      <div className="h-4 w-3/4 rounded bg-slate-100" />
+                      <div className="h-4 w-2/3 rounded bg-slate-100" />
+                    </div>
+                  ))}
+                </div>
+              </aside>
+
+              {/* Provider results */}
+              <section className="min-w-0 space-y-5">
+                {[1, 2, 3].map((provider) => (
+                  <div
+                    key={provider}
+                    className="rounded-xl border border-slate-200 bg-white p-5"
+                  >
+                    {/* Provider information */}
+                    <div className="flex items-start gap-4">
+                      <div className="size-14 shrink-0 rounded-xl bg-slate-200" />
+
+                      <div className="min-w-0 flex-1 space-y-3">
+                        <div className="h-5 w-48 max-w-full rounded bg-slate-200" />
+                        <div className="h-3 w-36 rounded bg-slate-100" />
+                        <div className="h-3 w-28 rounded bg-slate-100" />
+                      </div>
+                    </div>
+
+                    {/* Service cards */}
+                    <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                      {[1, 2, 3].map((service) => (
+                        <div
+                          key={service}
+                          className="rounded-lg border border-slate-100 p-4"
+                        >
+                          <div className="h-3 w-20 rounded bg-teal-50" />
+                          <div className="mt-4 h-4 w-full rounded bg-slate-200" />
+                          <div className="mt-2 h-4 w-3/4 rounded bg-slate-100" />
+                          <div className="mt-5 h-5 w-24 rounded bg-slate-200" />
+                          <div className="mt-4 h-9 w-full rounded-lg bg-slate-100" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
     );
   }
 
   if (isError || !explorerData || !filteredResult) {
     return (
-      <main className="mx-auto max-w-7xl space-y-4 p-6">
-        <h1 className="text-xl font-semibold text-slate-900">
-          Unable to load services
-        </h1>
-        <p role="alert" className="text-sm text-slate-600">
-          Something went wrong while loading the service catalogue.
-        </p>
-        <Button onClick={() => void refetch()}>Try again</Button>
-      </main>
+      <div className="flex min-h-screen flex-col bg-[#f8fafc] text-slate-900">
+        {/* Header */}
+        <header className="border-b border-slate-200 bg-white">
+          <div className="mx-auto flex h-16 max-w-[1440px] items-center px-5 lg:px-8">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5"
+              aria-label="MedEx home"
+            >
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#e4f5f3] text-[#14756f]">
+                <HeartPulse className="size-5" />
+              </span>
+
+              <span className="text-xl font-bold tracking-[-0.04em] text-[#123b4a]">
+                Med<span className="text-[#20837e]">Ex</span>
+              </span>
+            </Link>
+
+            <span className="ml-auto text-sm text-slate-500">
+              Healthcare Service Explorer
+            </span>
+          </div>
+        </header>
+
+        {/* Error content */}
+        <main className="flex flex-1 items-center justify-center px-5 py-16">
+          <section
+            className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm sm:px-10"
+            aria-labelledby="error-title"
+          >
+            <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-rose-50">
+              <span className="flex size-11 items-center justify-center rounded-full border border-rose-200 text-2xl font-semibold text-rose-600">
+                !
+              </span>
+            </div>
+
+            <p className="mt-6 text-xs font-semibold uppercase tracking-[0.12em] text-rose-600">
+              Something went wrong
+            </p>
+
+            <h1
+              id="error-title"
+              className="mt-2 text-2xl font-bold tracking-tight text-[#123b4a]"
+            >
+              Unable to load services
+            </h1>
+
+            <p
+              role="alert"
+              className="mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-500"
+            >
+              We couldn&apos;t retrieve the healthcare service catalogue. This
+              might be a temporary connection issue. Please try again.
+            </p>
+
+            <Button
+              onClick={() => void refetch()}
+              className="mt-7 h-11 w-full bg-[#14756f] text-white hover:bg-[#105f5a] sm:w-auto sm:min-w-40"
+            >
+              Try again
+            </Button>
+
+            <div className="mt-6 border-t border-slate-100 pt-5">
+              <p className="text-xs text-slate-400">
+                MedEx Healthcare Service Explorer
+              </p>
+            </div>
+          </section>
+        </main>
+
+        <footer className="border-t border-slate-200 bg-white py-4">
+          <p className="text-center text-xs text-slate-400">
+            Trusted care, easier to compare.
+          </p>
+        </footer>
+      </div>
     );
   }
 
